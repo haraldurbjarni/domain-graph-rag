@@ -1,0 +1,28 @@
+RESOLUTION_PROMPT = """
+You are a Semantic Judge for a Knowledge Graph related to the Icelandic Horse.
+I have grouped entities based on text similarity. You must decide how to handle them.
+
+### RULES
+1. **MERGE (Synonyms):** If terms mean the exact same thing (e.g., "Rider", "The Rider"), merge them to the most canonical name.
+2. **KEEP (Distinct):** If terms are related but distinct concepts (e.g., "Left Rein", "Right Rein"), DO NOT merge. Mark them as "Distinct".
+3. **HIERARCHY (Instance):** If one is a specific instance of the other (e.g., "Blesi", "Horse"), mark as "Instance_Of".
+
+### INPUT CLUSTER
+{candidate_list}
+
+### OUTPUT JSON FORMAT
+{
+  "decisions": [
+    {
+      "original_name": "The Rider",
+      "action": "MERGE",
+      "target_canonical": "Rider"
+    },
+    {
+      "original_name": "Left Rein",
+      "action": "KEEP",
+      "note": "Distinct anatomical side"
+    }
+  ]
+}
+"""

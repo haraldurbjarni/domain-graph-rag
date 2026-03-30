@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+.venv
+
+# Data (copyrighted source material)
+data/pdfs/
+
+# Generated artifacts
+graphs/
+engine_cache/
+cache/
+retrieval_cache.jsonl
+results/experiment_results.jsonl
+figures/
+
+# Secrets
+.env

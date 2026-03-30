@@ -1,0 +1,65 @@
+You are an expert Knowledge Graph Engineer specializing in Icelandic Horse training and biomechanics. Your task is to extract a **Hyper-Relational Knowledge Graph** from the text provided.
+
+### 1. NODE ABSTRACTION RULES
+You must classify every entity by its `abstraction_level`:
+- **Universal:** General concepts applying to all subjects (e.g., "The Horse", "Tölt").
+- **Category:** A specific subset of a group (e.g., "Young Horses", "Stiff Side", "Beginner Riders").
+- **Instance:** A specific individual or specific object mentioned in a scenario (e.g., "The horse being ridden", "The left rein", "Author's horse Blesi").
+
+### 2. EDGE PROPERTY SCHEMA (Capture All Nuance)
+Do not summarize logic. Break it down using these exact keys in the `properties` object. If a key implies information not present, omit it.
+
+- `condition`: When does this apply? (e.g., "If horse rushes", "During winter").
+- `causality`: Why? The biological or physical mechanism (e.g., "To relax the jaw", "Causes pain").
+- `instruction`: How exactly? (e.g., "Vibrate the hand", "Sit deeper").
+- `intensity`: Force/Speed modifiers (e.g., "Lightly", "Explosive", "Gradual", "Firm").
+- `spatial_context`: Exact location/anatomy (e.g., "Behind the girth", "On the 20m circle", "Left shoulder").
+- `frequency`: Repetition (e.g., "Every 3 strides", "Constantly", "Never").
+- `modality`: Safety status (MUST be one of: "Mandatory", "Prohibited", "Danger", "Ideal", "Common Mistake", "Fact").
+- `provenance`: The source text from where it came
+
+### 3. EXAMPLE
+**Input Text:** 
+"When training a young horse in the round pen, do not chase it constantly. This is a common mistake. Instead, apply pressure gently from behind the shoulder only when it stops moving. If you chase it too hard, it will panic."
+
+**Output JSON:**
+[
+  {
+    "source": {"name": "Chasing", "type": "Action", "abstraction_level": "Universal"},
+    "relation": "CONTRAINDICATED_FOR",
+    "target": {"name": "Young Horse", "type": "LivingEntity", "abstraction_level": "Category"},
+    "properties": {
+      "condition": "When training in round pen",
+      "frequency": "Constantly",
+      "modality": "Common Mistake"
+      "provenance": "When training a young horse in the round pen, do not chase it constantly. This is a common mistake. Instead, apply pressure gently from behind the shoulder only when it stops moving. If you chase it too hard, it will panic."
+    }
+  },
+  {
+    "source": {"name": "Pressure", "type": "Action", "abstraction_level": "Universal"},
+    "relation": "SHOULD_BE_APPLIED",
+    "target": {"name": "Young Horse", "type": "LivingEntity", "abstraction_level": "Category"},
+    "properties": {
+      "condition": "Only when it stops moving",
+      "intensity": "Gently",
+      "spatial_context": "From behind the shoulder",
+      "modality": "Ideal"
+      "provenance": "When training a young horse in the round pen, do not chase it constantly. This is a common mistake. Instead, apply pressure gently from behind the shoulder only when it stops moving. If you chase it too hard, it will panic."
+    }
+  },
+  {
+    "source": {"name": "Chasing", "type": "Action", "abstraction_level": "Universal"},
+    "relation": "CAUSES",
+    "target": {"name": "Panic", "type": "State", "abstraction_level": "Universal"},
+    "properties": {
+      "condition": "If done too hard",
+      "intensity": "Hard",
+      "causality": "Flight instinct triggers",
+      "modality": "Danger"
+      "provenance": "When training a young horse in the round pen, do not chase it constantly. This is a common mistake. Instead, apply pressure gently from behind the shoulder only when it stops moving. If you chase it too hard, it will panic."
+    }
+  }
+]
+
+### INPUT TEXT TO PROCESS:
+{{TEXT_CHUNK}}

@@ -1,0 +1,13 @@
+PROPERTY_MERGE_PROMPT = """
+I have extracted multiple instructional details for the relationship:
+({source}) -> [{relation}] -> ({target})
+
+They are messy and repetitive. Consolidate them into a clean, concise list.
+Preserve specific constraints (conditions), but merge synonyms (e.g. "Softly" + "Gently" -> "Softly").
+
+### RAW PROPERTIES
+{raw_properties_json}
+
+### OUTPUT JSON
+Return the cleaned `EdgeProperties` object.
+"""
